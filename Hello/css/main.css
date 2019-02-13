@@ -1,0 +1,118 @@
+body {
+  color: black;
+  background-color: #E9EEF2;
+  font-size: 8px;
+  font-family: 'Lato', sans-serif;
+  height: 1000px;
+  width: 755px;
+  padding: 30px;
+  /*  
+    font-family: 'Signika', sans-serif;
+    font-family: 'Signika Negative', sans-serif;*/
+}
+
+
+.layout-positioner::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.cell {
+  background-color:white;
+  margin-bottom: 10px; 
+  padding: 5px;
+
+}
+
+.column {
+  float: left;
+  margin-bottom: 10px;
+  padding: 5px;
+  height: 60px; 
+  width: 47%;
+}
+
+.header .column {
+  background-color: white;
+  height: 120px;
+  width: 217px;
+ }
+
+.column:first-child {
+  margin-right: 40px;/**/
+}
+
+.column:last-child {
+  margin-left: -10px;/**/
+  width: 190px;
+}
+
+
+
+
+
+.features .column-Main {
+  margin-top: 5px;
+  margin-left: -30px;/**/
+  background-color:#DBE2E9;
+  width: 4px;
+  padding: 0px;
+}
+
+.features .column:first-child{
+  margin-left: -5px;
+}
+
+.features .column:last-child .cell {
+  background-color:#DBE2E9;
+}
+
+.features .column:last-child{
+  margin-right: 0px;
+  width: 38%;
+}
+
+
+
+.footer {
+  min-height: 35px;
+
+}
+
+
+
+.share b {
+margin-right: 15px;
+font-weight: normal;
+color: #7f8c8d;
+text-transform: uppercase;
+}
+
+.social {
+display: inline-block;
+width: 20px;
+height: 15px;
+margin-right: 10px;
+vertical-align: middle;
+background: #bdc3c7 url("/img/social.png")   no-repeat ;
+}
+
+.social-vk {
+background-color: #6d8fb3;
+background-position: 0 0;
+}
+
+.social-fb {
+background-color: #526da3;
+background-position: -35px 0;
+}
+
+.social-tw {
+background-color: #73bfe6;
+background-position: -70px 0;
+}
+
+
+
+
