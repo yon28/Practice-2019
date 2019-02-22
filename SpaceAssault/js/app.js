@@ -45,7 +45,7 @@ function init() {
 }
 //5.
 resources.load([
-    'img/sprites.png',
+    'img/sprites_02.png',
     'img/terrain.png'
 ]);
 resources.onReady(init);
@@ -53,13 +53,14 @@ resources.onReady(init);
 //7. Game state
 var player = {
     pos: [0, 0],
-    sprite: new Sprite('img/sprites.png', [0, 0], [39, 39], 16, [0, 1])
+    sprite: new Sprite('img/sprites_02.png', [0, 0], [39, 39], 16, [0, 1])
 };
 
 var bullets = [];
 var enemies = [];
 var explosions = [];
-
+var megaliths = [];
+addMegaliths();
 var lastFire = Date.now();
 var gameTime = 0;
 var isGameOver;
@@ -73,10 +74,29 @@ var playerSpeed = 200;
 var bulletSpeed = 500;
 var enemySpeed = 100;
 
+
+function addMegaliths() { /**/
+    for (var i = 0; i < 2 + Math.random() * 2; i++) {
+        megaliths.push({
+            pos: [90 + Math.random() * (canvas.width - 140), //90 + 140 * Math.round((Math.random()) * (canvas.width - 140) / 140),
+                Math.random() * (canvas.height - 100)
+            ],
+            sprite: new Sprite('img/sprites_02.png', [0, 210], [60, 60])
+        });
+    }
+    for (var i = 0; i < 2 + Math.random() * 2; i++) {
+        megaliths.push({
+            pos: [90 + Math.random() * (canvas.width - 140),
+                Math.random() * (canvas.height - 100)
+            ],
+            sprite: new Sprite('img/sprites_02.png', [0, 270], [50, 50])
+        });
+    }
+}
+
 //11. Update game objects
 function update(dt) {
     gameTime += dt;
-
     handleInput(dt);
     updateEntities(dt);
 
@@ -87,7 +107,7 @@ function update(dt) {
             pos: [canvas.width,
                 Math.random() * (canvas.height - 39)
             ],
-            sprite: new Sprite('img/sprites.png', [0, 78], [80, 39],
+            sprite: new Sprite('img/sprites_02.png', [0, 78], [80, 39],
                 6, [0, 1, 2, 3, 2, 1])
         });
     }
@@ -96,22 +116,49 @@ function update(dt) {
 
     scoreEl.innerHTML = score;
 };
+
+
+function checkPlayerMegaliths() { /* */
+    for (var i = 0; i < megaliths.length; i++) {
+        var pos = player.pos;
+        var size = player.sprite.size;
+        var pos2 = megaliths[i].pos;
+        var size2 = megaliths[i].sprite.size;
+        if (boxCollides(pos, size, pos2, size2)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 //12.
 function handleInput(dt) {
     if (input.isDown('DOWN') || input.isDown('s')) {
         player.pos[1] += playerSpeed * dt;
+        if (checkPlayerMegaliths()) /* */ {
+            player.pos[1] -= playerSpeed * dt;
+        }
     }
 
     if (input.isDown('UP') || input.isDown('w')) {
         player.pos[1] -= playerSpeed * dt;
+        if (checkPlayerMegaliths()) {
+            player.pos[1] += playerSpeed * dt;
+        }
     }
 
     if (input.isDown('LEFT') || input.isDown('a')) {
         player.pos[0] -= playerSpeed * dt;
+        if (checkPlayerMegaliths()) {
+            player.pos[0] += playerSpeed * dt;
+        }
     }
 
     if (input.isDown('RIGHT') || input.isDown('d')) {
         player.pos[0] += playerSpeed * dt;
+        if (checkPlayerMegaliths()) {
+            player.pos[0] -= playerSpeed * dt;
+        }
     }
 
     if (input.isDown('SPACE') &&
@@ -123,17 +170,17 @@ function handleInput(dt) {
         bullets.push({
             pos: [x, y],
             dir: 'forward',
-            sprite: new Sprite('img/sprites.png', [0, 39], [18, 8])
+            sprite: new Sprite('img/sprites_02.png', [0, 39], [18, 8])
         });
         bullets.push({
             pos: [x, y],
             dir: 'up',
-            sprite: new Sprite('img/sprites.png', [0, 50], [9, 5])
+            sprite: new Sprite('img/sprites_02.png', [0, 50], [9, 5])
         });
         bullets.push({
             pos: [x, y],
             dir: 'down',
-            sprite: new Sprite('img/sprites.png', [0, 60], [9, 5])
+            sprite: new Sprite('img/sprites_02.png', [0, 60], [9, 5])
         });
 
         lastFire = Date.now();
@@ -143,6 +190,7 @@ function handleInput(dt) {
 function updateEntities(dt) {
     // Update the player sprite animation
     player.sprite.update(dt);
+
 
     // Update all the bullets
     for (var i = 0; i < bullets.length; i++) {
@@ -167,9 +215,18 @@ function updateEntities(dt) {
         }
     }
 
-    // Update all the enemies
+    // Update all the enemies/*! */
     for (var i = 0; i < enemies.length; i++) {
         enemies[i].pos[0] -= enemySpeed * dt;
+        if (checkenEmieMegalithsCollisions(enemies[i])) {
+            enemies[i].pos[0] += enemySpeed * dt;
+            if (enemies[i].pos[1] < canvas.height - 40) {
+                enemies[i].pos[1] += enemySpeed * dt;
+                if (checkenEmieMegalithsCollisions(enemies[i])) {
+                    enemies[i].pos[1] -= enemySpeed * dt;
+                }
+            }
+        }
         enemies[i].sprite.update(dt);
 
         // Remove if offscreen
@@ -191,6 +248,18 @@ function updateEntities(dt) {
     }
 }
 
+function checkenEmieMegalithsCollisions(enemie) { /* */
+    var pos = enemie.pos;
+    var size = enemie.sprite.size;
+    for (var i = 0; i < megaliths.length; i++) {
+        var pos2 = megaliths[i].pos;
+        var size2 = megaliths[i].sprite.size;
+        if (boxCollides(pos, size, pos2, size2)) {
+            return true;
+        }
+    }
+    return false;
+}
 //15. Collisions
 
 function collides(x, y, r, b, x2, y2, r2, b2) {
@@ -204,6 +273,7 @@ function boxCollides(pos, size, pos2, size2) {
         pos2[0], pos2[1],
         pos2[0] + size2[0], pos2[1] + size2[1]);
 }
+
 //16.
 function checkCollisions() {
     checkPlayerBounds();
@@ -228,7 +298,7 @@ function checkCollisions() {
                 // Add an explosion
                 explosions.push({
                     pos: pos,
-                    sprite: new Sprite('img/sprites.png', [0, 117], [39, 39],
+                    sprite: new Sprite('img/sprites_02.png', [0, 117], [39, 39],
                         16, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
                         null,
                         true)
@@ -265,15 +335,15 @@ function checkPlayerBounds() {
 function render() {
     ctx.fillStyle = terrainPattern;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+    renderEntities(megaliths); /* */
     // Render the player if the game isn't over
     if (!isGameOver) {
         renderEntity(player);
     }
-
     renderEntities(bullets);
     renderEntities(enemies);
     renderEntities(explosions);
+
 };
 
 function renderEntities(list) {
