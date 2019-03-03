@@ -1,12 +1,21 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Tanks
 {
     public partial class GameForm : Form
     {
-        public static Random rand = new Random();
-        private readonly ViewGame viewGame;
+
+        private ReportForm reportForm = new ReportForm();
+        private void GameForm_Move(object sender, EventArgs e)
+        {
+            MoveChildForms();
+        }
+        private void MoveChildForms()
+        {
+            reportForm.Location = new Point(Location.X + Width + 10, Location.Y);
+        }
 
         public static string[] map = {
             "......*......",
@@ -24,10 +33,15 @@ namespace Tanks
             "......*......"
                               };
 
-        public GameForm( int x_ ,  int y_ ,  int countTank_, int countApples_ )
+        public static Random rand = new Random();
+        private readonly ViewGame viewGame;
+        public static Game game;
+
+        public  GameForm( int x_ = 520,  int y_ = 520 ,  int countTank_ = 5, int countApples_ = 5, int speed_= 4)
         {
             x = x_;
             y = y_;
+            speed = speed_;
             countTank = countTank_;
             countApples = countApples_;
             InitializeComponent();
@@ -35,14 +49,35 @@ namespace Tanks
             for (int i = 0; i < map.Length; i++)
                 for (int j = 0; j < map[0].Length; j++)
                     countWall += map[i][j] == '*' ? 1 : 0;
-            p_Map.Controls.Add(l_points);
-            Game game = new Game();
-            viewGame = new ViewGame(p_Map, l_points);
+
+            game = new Game();
+            viewGame = new ViewGame(p_Map, lbScore);
             viewGame.SubscribeKeyPress();
             viewGame.Model = game;
-            viewGame.Model.Start();
+            timer1.Interval = 70; //миллисекунд
+            timer1.Tick += new EventHandler(RunFrame);
+            timer1.Enabled = true;
+            UpdateStats();
         }
 
+        public void RunFrame(object sender, EventArgs e)
+        {
+            UpdateStats();
+        }
+
+        private void UpdateStats()     
+        {
+            if  (lbScore!= null)
+            {
+                lbScore.Text = game?.lbScore.Text;
+            } 
+        }
+
+        public static int speed
+        {
+            get;
+            private set;
+        }
         public static int x
         {
             get;
@@ -76,8 +111,18 @@ namespace Tanks
              viewGame.Model.Dispose();
         }
 
-        // viewGame.Model.Dispose();
+        private void GameForm_Load(object sender, EventArgs e)
+        {
+   
+        }
 
-
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            reportForm.Show(this);
+            MoveChildForms();
+            btnStart.Visible = false;
+            viewGame.Model.Start();
+            this.Activate();
+        }
     }
 }

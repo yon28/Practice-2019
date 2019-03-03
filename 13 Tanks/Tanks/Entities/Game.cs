@@ -2,53 +2,40 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Tanks
 {
-
-    class Game
+    public class Game
     {
-        List<Tank> arrTank = new List<Tank>();
-        List<Wall> arrWall = new List<Wall>();
-        List<Apple> arrApple = new List<Apple>();
-        Kolobok packMan;
-
-        public List<Apple> ArrApple
+        public List<ReportLine> report = new List<ReportLine>();
+        public void UpdateReport()
         {
-            get { return arrApple; }
+            report.Clear();
+            for (int i = 0; i < ArrApple.Count; i++)
+            {
+                report.Add(new ReportLine($"Apple {i}", ArrApple[i].Position));
+            }
+            for (int i = 0; i < ArrApple.Count; i++)
+            {
+                report.Add(new ReportLine($"Tank {i}", ArrTank[i].Position));
+            }
+            report.Add(new ReportLine($"Kolobok", Kolobok.Position));
         }
 
-        public List<Wall> ArrWall
+        public void Shoot()
         {
-            get { return arrWall; }
+            Rectangle rect = new Rectangle(kolobok.Position.X, kolobok.Position.Y, (new Bullet()).Width, (new Bullet()).Height);
+            var bullet = new Bullet(rect.Location);
+            bullet.DirectionNow = kolobok.DirectionNow;
+            arrBullet.Add(bullet);
+            Thread thread = new Thread(new ThreadStart(bullet.Run));
+            arrThread.Add(thread);
         }
-
-        public Kolobok Kolobok
-        {
-            get { return packMan; }
-        }
-
-        public List<Tank> ArrTank
-        {
-            get { return arrTank; }
-        }
-
-
-        List<Thread> arrThread = new List<Thread>();
-
-        private Thread packManThread;
-
-        private static int score = 0;
-
-        public static int Score
-        {
-            get { return Game.score; }
-            set { Game.score = value; }
-        }
-
 
         public Game()
         {
+            lbScore.Text = "0";
 
             for (int i = 0; i < GameForm.countWall; i++)
             {
@@ -56,7 +43,6 @@ namespace Tanks
                 arrWall.Add(new Wall(rect.Location));
             }
             PlaceWalls();
-
 
             for (int i = 0; i < GameForm.countTank; i++)
             {
@@ -81,26 +67,18 @@ namespace Tanks
 
                 arrApple.Add(new Apple(rect.Location));
             }
+
             Rectangle rect2 = new Rectangle();
             do
             {
                 rect2 = new Rectangle(GameForm.rand.Next(0, GameForm.x), GameForm.rand.Next(0, GameForm.y), (new Kolobok()).Width, (new Kolobok()).Height);
             } while (Collides(rect2));
 
-            packMan = new Kolobok(rect2.Location);
+            kolobok = new Kolobok(rect2.Location);
 
-            packManThread = new Thread(new ThreadStart(Kolobok.Run));
+            kolobokThread = new Thread(new ThreadStart(Kolobok.Run));
+
             SubscribePos();
-        }
-
-        public void Start()
-        {
-
-            foreach (Thread thread in arrThread)
-            {
-                thread.Start();
-            }
-            packManThread.Start();
         }
 
         private void PlaceWalls()
@@ -131,22 +109,15 @@ namespace Tanks
             {
                 if (arrApple[i].CollidesWith(rect)) return true;
             }
-            if (packMan != null && packMan.CollidesWith(rect)) return true;
+            if (kolobok != null && kolobok.CollidesWith(rect)) return true;
 
             return false;
         }
 
-        public void Dispose()
-        {
-            for (int i = 0; i < arrThread.Count; i++)
-            {
-                arrThread[i].Abort();
-            }
-            packManThread.Abort();
-        }
-
         public void SubscribePos()
         {
+            ScoreChanged += OnScoreChanged;
+
             for (int i = 0; i < arrTank.Count; i++)
             {
                 for (int j = 0; j < arrTank.Count; j++)
@@ -166,27 +137,27 @@ namespace Tanks
             }
             for (int j = 0; j < arrWall.Count; j++)
             {
-                packMan.CheckPosition += new EventHandler(arrWall[j].OnCheckPosition);
+                kolobok.CheckPosition += new EventHandler(arrWall[j].OnCheckPosition);
             }
             for (int j = 0; j < arrTank.Count; j++)
             {
-                packMan.CheckPosition += new EventHandler(arrTank[j].OnCheckPosition);
+                kolobok.CheckPosition += new EventHandler(arrTank[j].OnCheckPosition);
             }
             for (int j = 0; j < arrTank.Count; j++)
             {
-                arrTank[j].CheckPosition += new EventHandler(packMan.OnCheckPosition);
-            }
-            for (int j = 0; j < arrApple.Count; j++)
-            {
-                packMan.CheckPosition += new EventHandler(arrApple[j].OnCheckPosition);
+                arrTank[j].CheckPosition += new EventHandler(kolobok.OnCheckPosition);
             }
 
-            packMan.ReplaceNeeded += new EventHandler(packMan_ReplaceNeeded);
+            for (int j = 0; j < arrApple.Count; j++)
+            {
+                kolobok.CheckPosition += new EventHandler(arrApple[j].OnCheckPosition);
+            }
+
+            kolobok.ReplaceNeeded += new EventHandler(kolobok_ReplaceNeeded);
             for (int j = 0; j < arrApple.Count; j++)
             {
                 arrApple[j].ReplaceNeeded += new EventHandler(apple_ReplaceNeeded);
             }
-
         }
 
         //Обработчик события перемещение объекта в заданные координаты
@@ -203,20 +174,36 @@ namespace Tanks
         }
 
         // Обработчик события перемещение объекта в заданные координаты
-
-        void packMan_ReplaceNeeded(object sender, EventArgs e)
+        public void kolobok_ReplaceNeeded(object sender, EventArgs e)
         {
             Rectangle rect2 = new Rectangle();
             do
             {
                 rect2 = new Rectangle(GameForm.rand.Next(0, GameForm.x - (sender as Obj).Width - 2), GameForm.rand.Next(GameForm.y - (sender as Obj).Height - 2), (new Kolobok()).Width, (new Kolobok()).Height);
             } while (Collides(rect2));
+            kolobok.Position = rect2.Location; //несколько жизней
 
-            packMan.Position = rect2.Location;
+        }
+
+        public void Start()
+        {
+            foreach (Thread thread in arrThread)
+            {
+                thread.Start();
+            }
+            kolobokThread.Start();
+        }
+
+        public void Dispose()
+        {
+            for (int i = 0; i < arrThread.Count; i++)
+            {
+                arrThread[i].Abort();
+            }
+            kolobokThread.Abort();
         }
 
         // Отписка каждого с каждым от событий пересечения
-
         private void UnSubscribePos()
         {
             for (int i = 0; i < arrTank.Count; i++)
@@ -230,6 +217,61 @@ namespace Tanks
                 }
             }
 
+        }
+
+        List<Thread> arrThread = new List<Thread>();
+        private Thread kolobokThread;
+        List<Tank> arrTank = new List<Tank>();
+        List<Wall> arrWall = new List<Wall>();
+        List<Apple> arrApple = new List<Apple>();
+        List<Bullet> arrBullet = new List<Bullet>();
+        Kolobok kolobok;
+
+        public List<Wall> ArrWall
+        {
+            get { return arrWall; }
+        }
+
+        public Kolobok Kolobok
+        {
+            get { return kolobok; }
+        }
+
+        public List<Tank> ArrTank
+        {
+            get { return arrTank; }
+        }
+
+        public List<Apple> ArrApple
+        {
+            get { return arrApple; }
+        }
+
+        public List<Bullet> ArrBullet
+        {
+            get { return arrBullet; }
+        }
+
+        public Label lbScore = new Label();
+        private int score = 0;
+        public int Score
+        {
+            get { return score; }
+            set
+            {
+                if (score != value)
+                {
+                    score = value;
+                    if (ScoreChanged != null) ScoreChanged(this, EventArgs.Empty);
+                }
+            }
+        }
+        public event EventHandler ScoreChanged;
+
+        public void OnScoreChanged(object sender, EventArgs e)
+        {
+            ScoreChangeEventArgs scoreArgs = e as ScoreChangeEventArgs;
+            lbScore.Text = this.Score.ToString();
         }
     }
 }

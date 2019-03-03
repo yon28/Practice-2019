@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-//using Kolobok.MVC;
 
 namespace Tanks
 {
@@ -43,7 +42,7 @@ namespace Tanks
                 if (sender is Kolobok)
                 {
                     Replace();
-                    Game.Score += 1;
+                    GameForm.game.Score++;
                 }
             }
         }

@@ -48,20 +48,29 @@
   <ItemGroup>
     <Compile Include="Controller\KolobokController.cs" />
     <Compile Include="Entities\Apple.cs" />
+    <Compile Include="Entities\Bullet.cs" />
     <Compile Include="Entities\Direction.cs" />
     <Compile Include="Entities\Dynamic.cs" />
     <Compile Include="Entities\Game.cs" />
     <Compile Include="Entities\Kolobok.cs" />
     <Compile Include="Entities\Obj.cs" />
+    <Compile Include="Entities\ReportLine.cs" />
     <Compile Include="Entities\Tank.cs" />
     <Compile Include="Entities\Wall.cs" />
-    <Compile Include="GameForm.cs">
+    <Compile Include="View\GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GameForm.Designer.cs">
+    <Compile Include="View\GameForm.Designer.cs">
       <DependentUpon>GameForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\ReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\ReportForm.Designer.cs">
+      <DependentUpon>ReportForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\ViewApple.cs" />
+    <Compile Include="View\ViewBullet.cs" />
     <Compile Include="View\ViewDynamic.cs" />
     <Compile Include="View\ViewGame.cs" />
     <Compile Include="View\ViewKolobok.cs" />
@@ -76,7 +85,7 @@
     <Compile Include="View\ViewObj.cs" />
     <Compile Include="View\ViewTank.cs" />
     <Compile Include="View\ViewWall.cs" />
-    <EmbeddedResource Include="GameForm.resx">
+    <EmbeddedResource Include="View\GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -89,6 +98,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="View\ReportForm.resx">
+      <DependentUpon>ReportForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -134,6 +146,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\wall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\P.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PL.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PR.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PU.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

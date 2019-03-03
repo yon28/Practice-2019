@@ -1,5 +1,4 @@
 ﻿using System;
-//using Kolobok.MVC;
 using System.Drawing;
 using System.Threading;
 
@@ -23,12 +22,13 @@ namespace Tanks
         protected int dy;
         protected int dx;
         protected bool flag = false;
-        protected int delta;
+        protected int delta =1;
         private int directionNow;
 
         public int DirectionNow
         {
             get { return directionNow; }
+            set { }
         }
 
         public Dynamic() : base()
@@ -38,7 +38,6 @@ namespace Tanks
 
         public Dynamic(Point position) : base(position)
         {
-            delta = 1;
             dy = 0;
             dx = delta;
             Turn();
@@ -49,16 +48,16 @@ namespace Tanks
             if (position.X + dx >= 0 && position.X + this.Width + dx < MapSize.X)
                 position.X += dx;
             else
-                Deviate();
+                Turn();
             if (position.Y + dy >= 0 && position.Y + this.Height + dy < MapSize.Y)
                 position.Y += dy;
             else
             {
-                Deviate();
+                Turn();
             }
             flag = true;
             OnPositionChanged();
-            Thread.Sleep(50);
+            Thread.Sleep(100 / GameForm.speed);
         }
 
         public void Stop()
@@ -109,13 +108,7 @@ namespace Tanks
         {
             switch (direction)
             {
-                case (int)Direction.Stay:
-                    {
-                        dy = 0;
-                        dx = 0;
-                        directionNow = (int)Direction.Stay;
-                        break;
-                    }
+
                 case (int)Direction.Down:
                     {
                         dy = delta;
@@ -162,15 +155,8 @@ namespace Tanks
                 Move();
             }
         }
-        public event EventHandler CheckPosition;
 
-
-        protected virtual void OnCheck()
-        {
-            if (CheckPosition != null)
-                CheckPosition(this, new PositionChangedEventArgs(new Rectangle(this.position.X + dx, this.position.Y + dy, this.Width, this.Height)));
-        }
-        public override void OnCheckPosition(object sender, EventArgs e)
+        override public void OnCheckPosition(object sender, EventArgs e)
         {
             PositionChangedEventArgs positionArgs = e as PositionChangedEventArgs;
             if (positionArgs == null)
@@ -184,9 +170,22 @@ namespace Tanks
                 }
                 if (sender is Kolobok)
                 {
+                    /**/
                     (sender as Kolobok).Die();
                 }
             }
+        }
+
+        virtual public void Die()/**/
+        {
+            OnReplaceNeeded();
+        }
+
+        public event EventHandler CheckPosition;
+        protected virtual void OnCheck()
+        {
+            if (CheckPosition != null)
+                CheckPosition(this, new PositionChangedEventArgs(new Rectangle(this.position.X + dx, this.position.Y + dy, this.Width, this.Height)));
         }
     }
 }

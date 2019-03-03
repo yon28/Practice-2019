@@ -1,46 +1,42 @@
 ﻿using System.Windows.Forms;
 using Tanks.Properties;
-
 namespace Tanks
 {
-
-    class ViewTank : ViewDynamic
+    class ViewBullet : ViewDynamic
     {
-        public ViewTank(Panel map) : base(map)
+        public ViewBullet (Panel map) : base(map)
         {
-            pictBox.Image = Resources.U2;
-        }
-
-        // Смена картинки при смене направления движения
-
-        protected override void ChangePicture()
-        {
-            switch (Model.DirectionNow)
+            int DirectionNow = GameForm.game.Kolobok.DirectionNow;
+            switch (DirectionNow)
             {
                 case (int)Direction.Up:
                     {
-                        pictBox.Image = Resources.U2;
+                        pictBox.Image = Resources.PU;
                         break;
                     }
                 case ((int)Direction.Down):
                     {
-                        pictBox.Image = Resources.D2;
+                        pictBox.Image = Resources.P;
                         break;
                     }
                 case (int)Direction.Right:
                     {
-                        pictBox.Image = Resources.R2;
+                        pictBox.Image = Resources.PR;
                         break;
                     }
                 case (int)Direction.Left:
                     {
-                        pictBox.Image = Resources.L2;
+                        pictBox.Image = Resources.PL;
                         break;
                     }
                 default:
                     break;
             }
+
+            map.Controls.Add(pictBox);
+            base.Show();
         }
+
 
     }
 }

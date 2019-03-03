@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Drawing;
-//using Kolobok.MVC;
+using System.Windows.Forms;
 
 namespace Tanks
 {
@@ -14,20 +14,17 @@ namespace Tanks
                 Move();
             }
         }
+        public void Shoot()
+        {
+             GameForm.game.Shoot();
+        }
 
         public Kolobok() : base()
         {
-            delta = 2;
         }
 
         public Kolobok(Point position) : base(position)
         {
-            delta = 2;
-        }
-
-        public void Die()
-        {
-            OnReplaceNeeded();
         }
 
         // Обработчик события смена координат
@@ -42,7 +39,6 @@ namespace Tanks
                     Die();
             }
         }
-
 
     }
 }

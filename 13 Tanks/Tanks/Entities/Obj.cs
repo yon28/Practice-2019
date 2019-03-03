@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-//using Kolobok.MVC;
 
 namespace Tanks
 {
@@ -45,13 +44,6 @@ namespace Tanks
             this.position = position;
         }
 
-        public event EventHandler ReplaceNeeded;
-        public void OnReplaceNeeded()
-        {
-            if (ReplaceNeeded != null)
-                ReplaceNeeded(this, new EventArgs());
-        }
-
         protected bool CheckCrossing(Point p)
         {
             if (this.Position.X + this.Width >= p.X && this.Position.X <= p.X)
@@ -86,12 +78,21 @@ namespace Tanks
                 ((Dynamic)sender).Deviate();
             }
         }
-
+   
         public event EventHandler PositionChanged;
         protected virtual void OnPositionChanged()
         {
             if (PositionChanged != null)
                 PositionChanged(this, new EventArgs());
         }
+
+
+        public event EventHandler ReplaceNeeded;
+        public void OnReplaceNeeded()
+        {
+            if (ReplaceNeeded != null)
+                ReplaceNeeded(this, new EventArgs());
+        }
+
     }
 }

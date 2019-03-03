@@ -1,4 +1,6 @@
 ﻿using System.Windows.Forms;
+using System.Drawing;
+
 namespace Tanks
 {
     class KolobokController
@@ -29,10 +31,19 @@ namespace Tanks
                             ((Kolobok)sender).IdentifyDirection((int)Direction.Right);
                             break;
                         }
+                    case Keys.Space:
+                        {
+                            ((Kolobok)sender).Shoot();
+                            break;
+                        }
                     default:
                         break;
                 }
             }
         }
+
+
+
     }
 }
+

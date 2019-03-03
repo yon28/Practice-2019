@@ -7,8 +7,8 @@ namespace Tanks
     {
         public ViewApple(Panel map) : base(map)
         {
-            picBox.Image = Resources.Apple;
-            map.Controls.Add(picBox);
+            pictBox.Image = Resources.Apple;
+            map.Controls.Add(pictBox);
         }
     }
 }
