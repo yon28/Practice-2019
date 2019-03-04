@@ -6,8 +6,8 @@ namespace Tanks
 {
     public class Bullet : Dynamic
     {
-        private const int width = 30;
-        private const int height = 30;
+        private const int width = 20;
+        private const int height = 20;
         public new int Width
         {
             get { return width; }
@@ -18,7 +18,7 @@ namespace Tanks
             get { return height; }
             set { }
         }
-        public Bullet (Point position) : base(position)
+        public Bullet(Point position) : base(position)
         {
         }
 
@@ -26,52 +26,32 @@ namespace Tanks
         {
         }
 
-       override public void Run()
+        override public void Run()
         {
-            while (true)/**/
+            while (true)
             {
                 OnCheck();
                 Move();
             }
         }
 
-
-        public override void OnCheckPosition(object sender, EventArgs e)
-        {
-            PositionChangedEventArgs positionArgs = e as PositionChangedEventArgs;
-            if (positionArgs == null)
-                return;
-            if (CollidesWith(positionArgs.NewRectangle))
-            {
-                if (sender is Tank)
-                {
-                    ((Dynamic)sender).Die();
-                }
-                if (sender is Kolobok)
-                {
-                    /**/
-                    (sender as Kolobok).Die();
-
-                }
-            }
-        }
-
-
         override public void Move()
         {
             if (position.X + dx >= 0 && position.X + this.Width + dx < MapSize.X)
-                position.X += dx;
-            else
-                /**/
-            if (position.Y + dy >= 0 && position.Y + this.Height + dy < MapSize.Y)
-                position.Y += dy;
-            else
             {
-               /**/
+                position.X += dx;
+            }
+            if (position.Y + dy >= 0 && position.Y + this.Height + dy < MapSize.Y)
+            {
+                position.Y += dy;
+            }
+            if (position.X == 0 || position.Y == 0 || position.X == MapSize.X || position.Y == MapSize.Y)
+            {
+                Stop();
             }
             flag = true;
             OnPositionChanged();
-            Thread.Sleep(50 / GameForm.speed);
+            Thread.Sleep(15 / GameForm.speed);
         }
     }
 }

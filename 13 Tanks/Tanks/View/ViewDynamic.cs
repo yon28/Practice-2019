@@ -4,7 +4,7 @@ using System.Windows.Forms;
 namespace Tanks
 {
     // Представление движущегося объекта
-    class ViewDynamic : View<Dynamic>
+    public class ViewDynamic : View<Dynamic>
     {
         protected PictureBox pictBox = new PictureBox();
         public ViewDynamic(Panel map)
@@ -30,7 +30,7 @@ namespace Tanks
         // Обработчик события изменение координат
         private void OnPositionChanged(object sender, EventArgs e)
         {
-            Show();
+           if( this.Model!=null) Show();
         }
 
         // Нарисовать картинку объекта

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Tanks
@@ -10,12 +11,19 @@ namespace Tanks
         {
             game = new Game();
             game.UpdateReport();
-            dgvReport.DataSource = game.report;
+            UpdateStatus();
         }
 
         public ReportForm()
         {
             InitializeComponent();
+
+        }
+
+        private void UpdateStatus()
+        {
+            dgvReport.DataSource = null;
+            dgvReport.DataSource = game?.report;
         }
     }
 }

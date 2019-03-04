@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Tanks
 {
     public partial class GameForm : Form
     {
+        public void GameOver()
+        {
+            Application.Exit();
+        }
 
         private ReportForm reportForm = new ReportForm();
         private void GameForm_Move(object sender, EventArgs e)
@@ -34,10 +39,10 @@ namespace Tanks
                               };
 
         public static Random rand = new Random();
-        private readonly ViewGame viewGame;
+        public static ViewGame viewGame;
         public static Game game;
 
-        public  GameForm( int x_ = 520,  int y_ = 520 ,  int countTank_ = 5, int countApples_ = 5, int speed_= 4)
+        public GameForm(int x_ = 520, int y_ = 520, int countTank_ = 5, int countApples_ = 5, int speed_ = 4)
         {
             x = x_;
             y = y_;
@@ -54,23 +59,25 @@ namespace Tanks
             viewGame = new ViewGame(p_Map, lbScore);
             viewGame.SubscribeKeyPress();
             viewGame.Model = game;
-            timer1.Interval = 70; //миллисекунд
+            timer1.Interval = 50; //миллисекунд
             timer1.Tick += new EventHandler(RunFrame);
             timer1.Enabled = true;
-            UpdateStats();
+            UpdateScore();
+
         }
 
         public void RunFrame(object sender, EventArgs e)
         {
-            UpdateStats();
+            UpdateScore();
+            game.UpdateReport();
         }
 
-        private void UpdateStats()     
+        private void UpdateScore()
         {
-            if  (lbScore!= null)
+            if (lbScore != null)
             {
                 lbScore.Text = game?.lbScore.Text;
-            } 
+            }
         }
 
         public static int speed
@@ -108,12 +115,12 @@ namespace Tanks
 
         private void GameForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-             viewGame.Model.Dispose();
+            viewGame.Model.Dispose();
         }
 
         private void GameForm_Load(object sender, EventArgs e)
         {
-   
+
         }
 
         private void btnStart_Click(object sender, EventArgs e)

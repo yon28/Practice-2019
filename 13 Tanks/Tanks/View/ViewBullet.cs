@@ -1,12 +1,14 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
 using Tanks.Properties;
 namespace Tanks
 {
-    class ViewBullet : ViewDynamic
+    public class ViewBullet : ViewDynamic
     {
-        public ViewBullet (Panel map) : base(map)
+        int DirectionNow = GameForm.game.Kolobok.DirectionNow;
+        public ViewBullet (Panel map):base( map)
         {
-            int DirectionNow = GameForm.game.Kolobok.DirectionNow;
             switch (DirectionNow)
             {
                 case (int)Direction.Up:
@@ -32,11 +34,11 @@ namespace Tanks
                 default:
                     break;
             }
-
             map.Controls.Add(pictBox);
-            base.Show();
+            pictBox.Height = Model.Height;
+            pictBox.Width = Model.Width;
         }
 
-
+       
     }
 }

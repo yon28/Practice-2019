@@ -10,5 +10,7 @@ namespace Tanks
         public Tank(Point position) : base(position)
         {
         }
+
+
     }
 }

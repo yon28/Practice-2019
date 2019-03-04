@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading;
 
 namespace Tanks
 {
@@ -33,7 +34,12 @@ namespace Tanks
             get { return mapSize; }
             set { mapSize = value; }
         }
-
+        public virtual void Stop()
+        {
+            position.X = -30;
+            position.Y = -30;
+            /**/
+        }
         public Obj()
         {
             this.position = new Point(GameForm.rand.Next(0, GameForm.x - Width - 2), GameForm.rand.Next(0, GameForm.y - Height - 2));
@@ -75,17 +81,25 @@ namespace Tanks
                 return;
             if (CollidesWith(positionArgs.NewRectangle))
             {
-                ((Dynamic)sender).Deviate();
+                if (!(sender is Bullet))
+                {
+                    ((Dynamic)sender).Deviate();
+                    Thread.Sleep(400 / GameForm.speed);
+                }
+                else  if (this is Wall)
+                {
+                   // ((Wall) this).Stop();
+                    ((Bullet)sender).Stop();
+                }
             }
         }
-   
+
         public event EventHandler PositionChanged;
         protected virtual void OnPositionChanged()
         {
             if (PositionChanged != null)
                 PositionChanged(this, new EventArgs());
         }
-
 
         public event EventHandler ReplaceNeeded;
         public void OnReplaceNeeded()

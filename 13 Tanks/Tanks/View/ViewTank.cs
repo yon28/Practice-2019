@@ -4,7 +4,7 @@ using Tanks.Properties;
 namespace Tanks
 {
 
-    class ViewTank : ViewDynamic
+    public class ViewTank : ViewDynamic
     {
         public ViewTank(Panel map) : base(map)
         {

@@ -20,7 +20,8 @@ namespace Tanks
             this.Model.PositionChanged += new EventHandler(OnPositionChanged);
             OnPositionChanged(this, new EventArgs());
         }
-        private void Unsubscribe()
+
+        protected void Unsubscribe()
         {
             this.Model.PositionChanged -= new EventHandler(OnPositionChanged);
         }
@@ -39,7 +40,6 @@ namespace Tanks
         delegate void SetImageCallback(Point p);
 
         // Подвинуть картинку элемента в соответствии с его координатами
-
         private void SetImage(Point p)
         {
             if (this.pictBox.InvokeRequired)
