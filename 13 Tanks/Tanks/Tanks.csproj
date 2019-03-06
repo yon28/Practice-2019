@@ -49,6 +49,8 @@
     <Compile Include="Controller\KolobokController.cs" />
     <Compile Include="Entities\Apple.cs" />
     <Compile Include="Entities\Bullet.cs" />
+    <Compile Include="Entities\BulletK.cs" />
+    <Compile Include="Entities\BulletT.cs" />
     <Compile Include="Entities\Direction.cs" />
     <Compile Include="Entities\Dynamic.cs" />
     <Compile Include="Entities\Game.cs" />

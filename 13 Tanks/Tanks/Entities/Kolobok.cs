@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Windows.Forms;
 
 namespace Tanks
 {
@@ -8,7 +7,7 @@ namespace Tanks
     {
         public override void Run()
         {
-            while (true)
+            while (run)
             {
                 OnCheck();
                 Move();
@@ -32,11 +31,16 @@ namespace Tanks
         {
             PositionChangedEventArgs positionArgs = e as PositionChangedEventArgs;
             if (positionArgs == null)
+            {
                 return;
+            }
             if (CollidesWith(positionArgs.NewRectangle))
             {
                 if (sender is Tank)
-                    Die();
+                {
+                    // Die();
+                    Stop();
+                }
             }
         }
 

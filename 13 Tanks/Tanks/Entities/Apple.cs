@@ -26,7 +26,7 @@ namespace Tanks
         }
 
         //Перемещает при съедании
-        private void Replace()
+        protected void Replace()
         {
             OnReplaceNeeded();
         }

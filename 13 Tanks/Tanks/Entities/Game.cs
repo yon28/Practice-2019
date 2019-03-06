@@ -8,8 +8,9 @@ namespace Tanks
 {
     public class Game
     {
-        List<Thread> arrThread = new List<Thread>();
+        public List<Thread> arrThread = new List<Thread>();
         private Thread kolobokThread;
+        public List<ReportLine> report = new List<ReportLine>();
         List<Tank> arrTank = new List<Tank>();
         List<Wall> arrWall = new List<Wall>();
         List<Apple> arrApple = new List<Apple>();
@@ -55,15 +56,15 @@ namespace Tanks
                 }
             }
         }
+
         public event EventHandler ScoreChanged;
 
         public void OnScoreChanged(object sender, EventArgs e)
         {
-            ScoreChangeEventArgs scoreArgs = e as ScoreChangeEventArgs;
+            var scoreArgs = e as ScoreChangeEventArgs;
             lbScore.Text = this.Score.ToString();
         }
 
-        public List<ReportLine> report = new List<ReportLine>();
         public void UpdateReport()
         {
             report.Clear();
@@ -85,40 +86,30 @@ namespace Tanks
             }
         }
 
-        public void SubscribeBulletPos(Bullet bullet)
-        {
-            for (int j = 0; j < arrTank.Count; j++)
-            {
-                bullet.CheckPosition += new EventHandler(arrTank[j].OnCheckPosition);
-                arrTank[j].CheckPosition += new EventHandler(bullet.OnCheckPosition);
-            }
-            for (int j = 0; j < arrWall.Count; j++)
-            {
-                bullet.CheckPosition += new EventHandler(arrWall[j].OnCheckPosition);
-            }
-        }
-
-        public void UnSubscribeBulletPos(Bullet bullet)
-        {
-            for (int j = 0; j < arrTank.Count; j++)
-            {
-                bullet.CheckPosition -= new EventHandler(arrTank[j].OnCheckPosition);
-                arrTank[j].CheckPosition -= new EventHandler(bullet.OnCheckPosition);
-            }
-            for (int j = 0; j < arrWall.Count; j++)
-            {
-                bullet.CheckPosition -= new EventHandler(arrWall[j].OnCheckPosition);
-            }
-        }
-
         public void Shoot()
         {
-            Rectangle rect = new Rectangle(kolobok.Position.X, kolobok.Position.Y, (new Bullet()).Width, (new Bullet()).Height);
-            var bullet = new Bullet(rect.Location);
-            bullet.IdentifyDirection((int)kolobok.DirectionNow);
+            Rectangle rect = new Rectangle(kolobok.Position.X, kolobok.Position.Y, (new BulletK()).Width, (new BulletK()).Height);
+            var bullet = new BulletK(rect.Location);
+            bullet.IdentifyDirection((int)kolobok.DirectionNow);//
+            bullet.Name = "";
+            BulletAdd(bullet);
+        }
+
+        public void ShootTank(Dynamic tank)
+        {
+            Rectangle rect = new Rectangle(tank.Position.X, tank.Position.Y, (new BulletT()).Width, (new BulletT()).Height);
+            var bullet = new BulletT(rect.Location);
+            bullet.IdentifyDirection((int)tank.DirectionNow);
+            bullet.Name = DateTime.Now.ToString();/**/
+            BulletAdd(bullet);
+        }
+
+        private void BulletAdd(Bullet bullet)
+        {
             arrBullet.Add(bullet);
             SubscribeBulletPos(bullet);
             Thread thread = new Thread(new ThreadStart(bullet.Run));
+            thread.Name = bullet.Name;
             arrThread.Add(thread);
             thread.Start();
         }
@@ -127,42 +118,44 @@ namespace Tanks
         {
             lbScore.Text = "0";
 
-            for (int i = 0; i < GameForm.countWall; i++)
+            for (int i = 0; i < GameForm.CountWall; i++)
             {
                 Rectangle rect = new Rectangle();
                 arrWall.Add(new Wall(rect.Location));
             }
             PlaceWalls();
 
-            for (int i = 0; i < GameForm.countTank; i++)
+            for (int i = 0; i < GameForm.CountTank; i++)
             {
                 Rectangle rect = new Rectangle();
                 do
                 {
-                    rect = new Rectangle(GameForm.rand.Next(0, GameForm.x), GameForm.rand.Next(0, GameForm.y), (new Tank()).Width, (new Tank()).Height);
+                    rect = new Rectangle(GameForm.rand.Next(0, GameForm.X), GameForm.rand.Next(0, GameForm.Y/2), (new Tank()).Width, (new Tank()).Height);
                 } while (Collides(rect));
                 arrTank.Add(new Tank(rect.Location));
                 Thread thread = new Thread(new ThreadStart(arrTank[i].Run));
                 arrThread.Add(thread);
             }
 
-            for (int i = 0; i < GameForm.countApples; i++)
+            Rectangle rect2 = new Rectangle();
+            do
+            {
+                rect2 = new Rectangle(GameForm.rand.Next(0, GameForm.X), GameForm.rand.Next(GameForm.Y*3/4, GameForm.Y), (new Kolobok()).Width, (new Kolobok()).Height);
+            } while (Collides(rect2));
+            kolobok = new Kolobok(rect2.Location);
+            kolobokThread = new Thread(new ThreadStart(Kolobok.Run));
+
+            for (int i = 0; i < GameForm.CountApples; i++)
             {
                 Rectangle rect = new Rectangle();
                 do
                 {
-                    rect = new Rectangle(GameForm.rand.Next(0, GameForm.x), GameForm.rand.Next(0, GameForm.y), (new Apple()).Width, (new Apple()).Height);
+                    rect = new Rectangle(GameForm.rand.Next(0, GameForm.X), GameForm.rand.Next(0, GameForm.Y), (new Apple()).Width, (new Apple()).Height);
                 } while (Collides(rect));
                 arrApple.Add(new Apple(rect.Location));
             }
 
-            Rectangle rect2 = new Rectangle();
-            do
-            {
-                rect2 = new Rectangle(GameForm.rand.Next(0, GameForm.x), GameForm.rand.Next(0, GameForm.y), (new Kolobok()).Width, (new Kolobok()).Height);
-            } while (Collides(rect2));
-            kolobok = new Kolobok(rect2.Location);
-            kolobokThread = new Thread(new ThreadStart(Kolobok.Run));
+
 
             SubscribePos();
         }
@@ -181,7 +174,7 @@ namespace Tanks
 
         private bool Collides(Rectangle rect)
         {
-            if (rect.Left < 0 || rect.Right >= GameForm.x || rect.Top < 0 || rect.Bottom >= GameForm.y)
+            if (rect.Left < 0 || rect.Right >= GameForm.X || rect.Top < 0 || rect.Bottom >= GameForm.Y)
                 return true;
             for (int i = 0; i < arrTank.Count; i++)
             {
@@ -216,10 +209,53 @@ namespace Tanks
                 arrThread[i].Abort();
             }
             kolobokThread.Abort();
+
         }
 
+        public void SubscribeBulletPos(Bullet bullet)
+        {
+            if (bullet is BulletK)
+            {
+                for (int j = 0; j < arrTank.Count; j++)
+                {
+                    bullet.CheckPosition += new EventHandler(arrTank[j].OnCheckPosition);
+                    arrTank[j].CheckPosition += new EventHandler(bullet.OnCheckPosition);
+                }
+            }
+            else
+            {
+                bullet.CheckPosition += new EventHandler(Kolobok.OnCheckPosition);
+                Kolobok.CheckPosition += new EventHandler(bullet.OnCheckPosition);
+            }
 
+            for (int j = 0; j < arrWall.Count; j++)
+            {
+                bullet.CheckPosition += new EventHandler(arrWall[j].OnCheckPosition);
+                arrWall[j].CheckPosition += new EventHandler(bullet.OnCheckPosition);
+            }
+        }
 
+        public void UnSubscribeBulletPos(Bullet bullet)
+        {
+            if (bullet is BulletK)
+            {
+                for (int j = 0; j < arrTank.Count; j++)
+                {
+                    bullet.CheckPosition -= new EventHandler(arrTank[j].OnCheckPosition);
+                    arrTank[j].CheckPosition -= new EventHandler(bullet.OnCheckPosition);
+                }
+            }
+            else
+            {
+                bullet.CheckPosition -= new EventHandler(Kolobok.OnCheckPosition);
+                Kolobok.CheckPosition -= new EventHandler(bullet.OnCheckPosition);
+            }
+            for (int j = 0; j < arrWall.Count; j++)
+            {
+                bullet.CheckPosition -= new EventHandler(arrWall[j].OnCheckPosition);
+                arrWall[j].CheckPosition -= new EventHandler(bullet.OnCheckPosition);
+            }
+        }
 
         public void SubscribePos()
         {
@@ -272,17 +308,28 @@ namespace Tanks
                 arrApple[j].ReplaceNeeded += new EventHandler(apple_ReplaceNeeded);
             }
 
+            for (int j = 0; j < arrWall.Count; j++)
+            {
+                arrWall[j].ReplaceNeeded += new EventHandler(wall_ReplaceNeeded);
 
+            }
         }
 
         //Обработчик события перемещение объекта в заданные координаты
+        void wall_ReplaceNeeded(object sender, EventArgs e)
+        {
+            Rectangle rect2 = new Rectangle();
+            rect2 = new Rectangle(-40/*-new Wall().Height*/, 0, new Wall().Height, new Wall().Height);
+            (sender as Wall).Position = rect2.Location;
+        }
 
+        //Обработчик события перемещение объекта в заданные координаты
         void apple_ReplaceNeeded(object sender, EventArgs e)
         {
             Rectangle rect2 = new Rectangle();
             do
             {
-                rect2 = new Rectangle(GameForm.rand.Next(0, GameForm.x - (sender as Obj).Width - 2), GameForm.rand.Next(GameForm.y - (sender as Obj).Height - 2), (new Apple()).Width, (new Apple()).Height);
+                rect2 = new Rectangle(GameForm.rand.Next(0, GameForm.X - (sender as Obj).Width - 2), GameForm.rand.Next(GameForm.Y - (sender as Obj).Height - 2), (new Apple()).Width, (new Apple()).Height);
             } while (Collides(rect2));
 
             (sender as Apple).Position = rect2.Location;
@@ -294,7 +341,7 @@ namespace Tanks
             Rectangle rect2 = new Rectangle();
             do
             {
-                rect2 = new Rectangle(GameForm.rand.Next(0, GameForm.x - (sender as Obj).Width - 2), GameForm.rand.Next(GameForm.y - (sender as Obj).Height - 2), (new Kolobok()).Width, (new Kolobok()).Height);
+                rect2 = new Rectangle(GameForm.rand.Next(0, GameForm.X - (sender as Obj).Width - 2), GameForm.rand.Next(GameForm.Y - (sender as Obj).Height - 2), (new Kolobok()).Width, (new Kolobok()).Height);
             } while (Collides(rect2));
             kolobok.Position = rect2.Location; //несколько жизней
             //UnSubscribePos();

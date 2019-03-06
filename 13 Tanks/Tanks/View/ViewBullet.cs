@@ -1,14 +1,13 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Tanks.Properties;
 namespace Tanks
 {
     public class ViewBullet : ViewDynamic
     {
-        int DirectionNow = GameForm.game.Kolobok.DirectionNow;
-        public ViewBullet (Panel map):base( map)
+        int DirectionNow; 
+        public ViewBullet (Dynamic dynamic, Panel map):base( map)
         {
+            DirectionNow = dynamic.DirectionNow;
             switch (DirectionNow)
             {
                 case (int)Direction.Up:

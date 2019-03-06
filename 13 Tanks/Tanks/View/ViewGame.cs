@@ -6,13 +6,13 @@ namespace Tanks
 {
     public class ViewGame : View<Game>
     {
-        public List<ViewTank> arrViewTank ;
+        public List<ViewTank> arrViewTank;
         ViewKolobok viewKolobok;
         List<ViewWall> viewWall;
         List<ViewApple> viewApple;
-        public List<ViewBullet> viewBullet = new List < ViewBullet >();
-        KolobokController controller = new KolobokController();
-        Panel panelMap;
+        public List<ViewBullet> viewBullet = new List<ViewBullet>();
+        KolobokController kolobokcontroller = new KolobokController();
+        public Panel panelMap;
 
         public ViewGame(Panel panelMap, Label lbScore)
         {
@@ -22,8 +22,8 @@ namespace Tanks
         private KeyEventHandler keyPress;
         public void SubscribeKeyPress()
         {
-            this.keyPress += new KeyEventHandler(controller.OnKeyPress);
-            controller.OnKeyPress(viewKolobok, new KeyEventArgs(Keys.Right));
+            this.keyPress += new KeyEventHandler(kolobokcontroller.OnKeyPress);
+            kolobokcontroller.OnKeyPress(viewKolobok, new KeyEventArgs(Keys.Right));
         }
         public virtual void OnKeyPress(Keys key)
         {
@@ -31,16 +31,22 @@ namespace Tanks
                 keyPress(viewKolobok.Model, new KeyEventArgs(key));
             if (key == Keys.Space)
             {
-                ViewBullet viewBullettemp = new ViewBullet(panelMap);
-                viewBullettemp.Model = Model.ArrBullet[Model.ArrBullet.Count - 1];
-                viewBullettemp.Model.MapSize = new Point(panelMap.Width, panelMap.Height);
-                viewBullettemp.Subscribe();
-                viewBullet.Add(viewBullettemp);
+                ViewShoot(Model.Kolobok);
             }
         }
+
+        public void ViewShoot(Dynamic dynamic)
+        {
+            ViewBullet viewBullettemp = new ViewBullet(dynamic, panelMap);
+            viewBullettemp.Model = Model.ArrBullet[Model.ArrBullet.Count - 1];
+            viewBullettemp.Model.MapSize = new Point(panelMap.Width, panelMap.Height);
+            viewBullettemp.Subscribe();
+            viewBullet.Add(viewBullettemp);
+        }
+
         public void UnsubscribeKeyPress()
         {
-            this.keyPress -= new KeyEventHandler(controller.OnKeyPress);
+            this.keyPress -= new KeyEventHandler(kolobokcontroller.OnKeyPress);
         }
 
         // Обновить

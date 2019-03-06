@@ -44,32 +44,35 @@ namespace Tanks
 
         public GameForm(int x_ = 520, int y_ = 520, int countTank_ = 5, int countApples_ = 5, int speed_ = 4)
         {
-            x = x_;
-            y = y_;
-            speed = speed_;
-            countTank = countTank_;
-            countApples = countApples_;
+            X = x_;
+            Y = y_;
+            Speed = speed_;
+            CountTank = countTank_;
+            CountApples = countApples_;
             InitializeComponent();
             //Расстановка стен по массиву map
             for (int i = 0; i < map.Length; i++)
                 for (int j = 0; j < map[0].Length; j++)
-                    countWall += map[i][j] == '*' ? 1 : 0;
+                    CountWall += map[i][j] == '*' ? 1 : 0;
 
             game = new Game();
             viewGame = new ViewGame(p_Map, lbScore);
             viewGame.SubscribeKeyPress();
             viewGame.Model = game;
-            timer1.Interval = 50; //миллисекунд
+            timer1.Interval = 200; //миллисекунд
             timer1.Tick += new EventHandler(RunFrame);
             timer1.Enabled = true;
             UpdateScore();
-
         }
 
-        public void RunFrame(object sender, EventArgs e)
+        private void RunFrame(object sender, EventArgs e)
         {
             UpdateScore();
             game.UpdateReport();
+            if (game.Kolobok.Position.X == -30)
+            {
+                lbGameOver.Visible = true;
+            }
         }
 
         private void UpdateScore()
@@ -80,33 +83,33 @@ namespace Tanks
             }
         }
 
-        public static int speed
+        public static int Speed
         {
             get;
             private set;
         }
-        public static int x
+        public static int X
         {
             get;
             private set;
         }
-        public static int y
+        public static int Y
         {
             get;
             private set;
         }
-        public static int countTank
+        public static int CountTank
         {
             get;
             private set;
         }
-        public static int countApples
+        public static int CountApples
         {
             get;
             private set;
         }
 
-        public static int countWall = 0;
+        public static int CountWall = 0;
 
         private void GameForm_KeyDown(object sender, KeyEventArgs e)
         {

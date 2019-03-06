@@ -1,11 +1,19 @@
 ﻿using System;
 using System.Drawing;
-using System.Threading;
 
 namespace Tanks
 {
     public class Obj
     {
+        protected int dy =0;
+        protected int dx =0;
+        private Point mapSize;
+        public Point MapSize
+        {
+            get { return mapSize; }
+            set { mapSize = value; }
+        }
+        public bool run = true;
         protected Point position;
         public Point Position
         {
@@ -28,21 +36,19 @@ namespace Tanks
             get { return height; }
             set { }
         }
-        private Point mapSize;
-        public Point MapSize
-        {
-            get { return mapSize; }
-            set { mapSize = value; }
-        }
+       
         public virtual void Stop()
         {
+            dy = 0;
+            dx = 0;
             position.X = -30;
             position.Y = -30;
-            /**/
+            run = false;
         }
+
         public Obj()
         {
-            this.position = new Point(GameForm.rand.Next(0, GameForm.x - Width - 2), GameForm.rand.Next(0, GameForm.y - Height - 2));
+            this.position = new Point(GameForm.rand.Next(0, GameForm.X - Width - 2), GameForm.rand.Next(0, GameForm.Y - Height - 2));
         }
 
         public Obj(Point position)
@@ -76,7 +82,7 @@ namespace Tanks
 
         public virtual void OnCheckPosition(object sender, EventArgs e)
         {
-            PositionChangedEventArgs positionArgs = e as PositionChangedEventArgs;
+            var positionArgs = e as PositionChangedEventArgs;
             if (positionArgs == null)
                 return;
             if (CollidesWith(positionArgs.NewRectangle))
@@ -84,11 +90,9 @@ namespace Tanks
                 if (!(sender is Bullet))
                 {
                     ((Dynamic)sender).Deviate();
-                    Thread.Sleep(400 / GameForm.speed);
                 }
                 else  if (this is Wall)
                 {
-                   // ((Wall) this).Stop();
                     ((Bullet)sender).Stop();
                 }
             }
