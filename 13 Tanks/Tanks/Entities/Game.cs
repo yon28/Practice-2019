@@ -67,21 +67,24 @@ namespace Tanks
 
         public void UpdateReport()
         {
+            report.Add(new ReportLine($"Kolobok", Kolobok.Position));
             report.Clear();
-            for (int i = 0; i < ArrApple.Count; i++)
-            {
-                report.Add(new ReportLine($"Apple {i}", ArrApple[i].Position));
-            }
             for (int i = 0; i < ArrTank.Count; i++)
             {
-                report.Add(new ReportLine($"Tank {i}", ArrTank[i].Position));
+                var line = new ReportLine($"Tank {i}", ArrTank[i].Position);
+                if (!(line.PointX == -30 || line.PointY == -30)) { report.Add(line); }
             }
-            report.Add(new ReportLine($"Kolobok", Kolobok.Position));
+            for (int i = 0; i < ArrApple.Count; i++)
+            {
+                var line = new ReportLine($"Apple {i}", ArrApple[i].Position);
+                if (!(line.PointX == -30 || line.PointY == -30)) { report.Add(line); }
+            }
             if (ArrBullet != null)
             {
                 for (int i = 0; i < ArrBullet.Count; i++)
                 {
-                    report.Add(new ReportLine($"Bullet {i}", ArrBullet[i].Position));
+                    var line = new ReportLine($"Bullet {i}", ArrBullet[i].Position);
+                    if (!(line.PointX == -30 || line.PointY == -30)) { report.Add(line); }
                 }
             }
         }
@@ -154,9 +157,6 @@ namespace Tanks
                 } while (Collides(rect));
                 arrApple.Add(new Apple(rect.Location));
             }
-
-
-
             SubscribePos();
         }
 
@@ -209,7 +209,7 @@ namespace Tanks
                 arrThread[i].Abort();
             }
             kolobokThread.Abort();
-
+            GameForm.reportForm.reportThread.Abort();
         }
 
         public void SubscribeBulletPos(Bullet bullet)

@@ -16,7 +16,7 @@ namespace Tanks
         {
         }
 
-        protected override  void Move()
+        public override void Move()
         {
             if (position.X + dx >= 0 && position.X + this.Width + dx < MapSize.X)
             {
@@ -26,7 +26,7 @@ namespace Tanks
             {
                 position.Y += dy;
             }
-            if (position.X == 0 || position.Y == 0 || position.X == MapSize.X- this.Width|| position.Y == MapSize.Y- this.Height)
+            if (position.X == 0 || position.Y == 0 || Math.Abs(MapSize.X - position.X) <= this.Width*2||  Math.Abs(MapSize.Y - position.Y)<= this.Height*2)
             {
                 Stop();
             }
@@ -47,7 +47,8 @@ namespace Tanks
                 if (sender is Kolobok && this is BulletT)
                 {
                     (sender as Kolobok).Stop();
-                    ((Bullet)this).Stop();
+                    this.Stop();
+                    this.Move();
                 }
                 if (sender is Tank && !(this is Bullet))
                 {

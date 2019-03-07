@@ -94,6 +94,7 @@ namespace Tanks
                 else  if (this is Wall)
                 {
                     ((Bullet)sender).Stop();
+
                 }
             }
         }

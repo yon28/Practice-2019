@@ -49,7 +49,7 @@ namespace Tanks
             }
         }
 
-        protected virtual void Move()
+        public virtual void Move()
         {
             if (position.X + dx >= 0 && position.X + this.Width + dx < MapSize.X)
             {
@@ -184,6 +184,7 @@ namespace Tanks
                 if (sender is Kolobok && this is BulletT)
                 {
                     ((Bullet)this).Stop();
+                    ((Bullet)this).Move();
                     (sender as Kolobok).Stop();
                 }
                 if (sender is Kolobok && this is Tank)

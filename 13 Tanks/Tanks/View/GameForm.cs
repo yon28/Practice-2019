@@ -38,7 +38,7 @@ namespace Tanks
         public static Random rand = new Random();
         public static ViewGame viewGame;
         public static Game game;
-        private ReportForm reportForm = new ReportForm();
+        public static ReportForm reportForm = new ReportForm();
         public static int CountWall = 0;
 
         public static int Speed
@@ -93,6 +93,7 @@ namespace Tanks
         {
             UpdateScore();
             game.UpdateReport();
+            reportForm.UpdateReport();
             if (game.Kolobok.Position.X == -30)
             {
                 lbGameOver.Visible = true;
