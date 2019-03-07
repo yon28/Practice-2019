@@ -23,7 +23,9 @@ namespace Tanks
             {
                 if (sender is BulletK)
                 {
-                    Stop();
+                    (sender as Dynamic).Stop();//
+                    this.Stop();
+                    this.Move();
                 }
                 if (sender is Kolobok)
                 {
@@ -36,6 +38,15 @@ namespace Tanks
                     
                 }
             }
+        }
+
+        public override void Stop()
+        {
+            dy = 0;
+            dx = 0;
+            position.X = -30;
+            position.Y = -30;
+            run = false;
         }
     }
 }

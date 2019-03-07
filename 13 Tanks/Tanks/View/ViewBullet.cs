@@ -37,7 +37,5 @@ namespace Tanks
             pictBox.Height = Model.Height;
             pictBox.Width = Model.Width;
         }
-
-       
     }
 }

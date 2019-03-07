@@ -6,6 +6,18 @@ namespace Tanks
     public class Wall : Obj
     {
         protected bool flag = false;
+        private const int width = 20;
+        private const int height = 20;
+        public new int Width
+        {
+            get { return width; }
+            set { }
+        }
+        public new int Height
+        {
+            get { return height; }
+            set { }
+        }
         public Wall(Point position) : base(position)
         {
         }

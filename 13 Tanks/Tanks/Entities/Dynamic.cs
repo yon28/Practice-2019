@@ -6,23 +6,9 @@ namespace Tanks
 {
     public class Dynamic : Obj
     {
-        private const int width = 30;
-        private const int height = 30;
         protected bool flag = false;
         protected int delta = 1;
         private int directionNow;
-
-        public new int Width
-        {
-            get { return width; }
-            set { }
-        }
-
-        public new int Height
-        {
-            get { return height; }
-            set { }
-        }
 
         public int DirectionNow
         {
@@ -54,7 +40,7 @@ namespace Tanks
                 {
                     Turn();
                 }
-                if ((this is Tank) && GameForm.rand.Next(0, 40) == 2)
+                if ((this is Tank) && GameForm.rand.Next(0, 100) == 2)
                 {
                     GameForm.game.ShootTank(this);
                 }
@@ -156,7 +142,6 @@ namespace Tanks
                         directionNow = (int)Direction.Up;
                         break;
                     }
-
                 default:
                     break;
             }
@@ -181,16 +166,20 @@ namespace Tanks
             }
             if (CollidesWith(positionArgs.NewRectangle))
             {
-
                 if (this is Tank && sender is BulletK)
                 {
-                    ((Dynamic)this).Stop();
                     ((Bullet)sender).Stop();
+                    this.Stop();
+                    this.Move();
                 }
-                if (sender is Tank && this is BulletK)
+                if (sender is Kolobok)
                 {
-                    ((Dynamic)sender).Stop();
-                    ((Bullet)this).Stop();
+                    (sender as Kolobok).Stop();
+                }
+                if (sender is Tank)
+                {
+                    ((Dynamic)sender).Deviate();
+                    this.Deviate();
                 }
                 if (sender is Kolobok && this is BulletT)
                 {
@@ -207,6 +196,15 @@ namespace Tanks
                     ((Dynamic)sender).Deviate();
                 }
             }
+        }
+
+        public override void Stop()
+        {
+            dy = 0;
+            dx = 0;
+            position.X = -30;
+            position.Y = -30;
+            run = false;
         }
 
     }

@@ -6,24 +6,30 @@ namespace Tanks
 {
     public partial class ReportForm : Form
     {
-        Game game;
+        private static ViewReportForm viewReportForm;
+        internal static ViewReportForm ViewReportForm
+        {
+            get => viewReportForm;
+            set => viewReportForm = value;
+        }
+
         private void Report_Load(object sender, EventArgs e)
         {
-            game = new Game();
-            game.UpdateReport();
-            UpdateStatus();
+            //GameForm.game.UpdateReport();
+            //UpdateStatus();
         }
 
         public ReportForm()
         {
             InitializeComponent();
-
+            //ViewReportForm = new ViewReportForm(dgvReport);
+            //ViewReportForm.Model = GameForm.game;
         }
 
         private void UpdateStatus()
         {
             dgvReport.DataSource = null;
-            dgvReport.DataSource = game?.report;
+            dgvReport.DataSource = GameForm.game?.report;
         }
     }
 }

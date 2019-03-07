@@ -24,8 +24,8 @@ namespace Tanks
                 OnPositionChanged();
             }
         }
-        private const int width = 40;
-        private const int height = 40;
+        private const int width = 20;
+        private const int height = 20;
         public int Width
         {
             get { return width; }

@@ -11,7 +11,5 @@ namespace Tanks
         public BulletT()
         {
         }
-
-
     }
 }

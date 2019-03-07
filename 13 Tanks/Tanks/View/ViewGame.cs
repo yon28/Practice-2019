@@ -57,7 +57,6 @@ namespace Tanks
             viewWall = new List<ViewWall>();
             viewApple = new List<ViewApple>();
             viewKolobok = new ViewKolobok(panelMap);
-
             for (int i = 0; i < Model.ArrWall.Count; i++)
             {
                 ViewWall viewWalltemp = new ViewWall(panelMap);
@@ -66,11 +65,9 @@ namespace Tanks
                 viewWalltemp.Subscribe();
                 viewWall.Add(viewWalltemp);
             }
-
             viewKolobok.Model = Model.Kolobok;
             viewKolobok.Model.MapSize = new Point(panelMap.Width, panelMap.Height);
             viewKolobok.Subscribe();
-
             for (int i = 0; i < Model.ArrTank.Count; i++)
             {
                 ViewTank viewTanktemp = new ViewTank(panelMap);
@@ -79,7 +76,6 @@ namespace Tanks
                 viewTanktemp.Subscribe();
                 arrViewTank.Add(viewTanktemp);
             }
-
             for (int i = 0; i < Model.ArrApple.Count; i++)
             {
                 ViewApple viewAppletemp = new ViewApple(panelMap);

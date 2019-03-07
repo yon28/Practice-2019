@@ -7,18 +7,7 @@ namespace Tanks
     public class Bullet : Dynamic
     {
         public string Name="";
-        private const int width = 20;
-        private const int height = 20;
-        public new int Width
-        {
-            get { return width; }
-            set { }
-        }
-        public new int Height
-        {
-            get { return height; }
-            set { }
-        }
+
         public Bullet(Point position) : base(position)
         {
         }
@@ -37,7 +26,7 @@ namespace Tanks
             {
                 position.Y += dy;
             }
-            if (position.X == 0 || position.Y == 0 || position.X == MapSize.X-30 || position.Y == MapSize.Y-30)
+            if (position.X == 0 || position.Y == 0 || position.X == MapSize.X- this.Width|| position.Y == MapSize.Y- this.Height)
             {
                 Stop();
             }
@@ -55,11 +44,6 @@ namespace Tanks
             }
             if (CollidesWith(positionArgs.NewRectangle))
             {
-                if (sender is Tank && this is BulletK)
-                {
-                    ((Tank)sender).Stop();
-                    ((Bullet)this).Stop();
-                }
                 if (sender is Kolobok && this is BulletT)
                 {
                     (sender as Kolobok).Stop();

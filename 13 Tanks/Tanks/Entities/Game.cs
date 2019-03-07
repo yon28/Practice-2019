@@ -217,8 +217,7 @@ namespace Tanks
             if (bullet is BulletK)
             {
                 for (int j = 0; j < arrTank.Count; j++)
-                {
-                    bullet.CheckPosition += new EventHandler(arrTank[j].OnCheckPosition);
+                {   bullet.CheckPosition += new EventHandler(arrTank[j].OnCheckPosition);
                     arrTank[j].CheckPosition += new EventHandler(bullet.OnCheckPosition);
                 }
             }
@@ -241,7 +240,7 @@ namespace Tanks
             {
                 for (int j = 0; j < arrTank.Count; j++)
                 {
-                    bullet.CheckPosition -= new EventHandler(arrTank[j].OnCheckPosition);
+                  //  bullet.CheckPosition -= new EventHandler(arrTank[j].OnCheckPosition);
                     arrTank[j].CheckPosition -= new EventHandler(bullet.OnCheckPosition);
                 }
             }

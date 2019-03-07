@@ -71,6 +71,7 @@
     <Compile Include="View\ReportForm.Designer.cs">
       <DependentUpon>ReportForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\ViewReportForm.cs" />
     <Compile Include="View\ViewApple.cs" />
     <Compile Include="View\ViewBullet.cs" />
     <Compile Include="View\ViewDynamic.cs" />
