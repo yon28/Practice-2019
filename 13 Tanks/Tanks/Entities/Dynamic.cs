@@ -43,9 +43,24 @@ namespace Tanks
                 if ((this is Tank) && GameForm.rand.Next(0, 100) == 2)
                 {
                     GameForm.game.ShootTank(this);
+                    ViewShootTank();
                 }
                 OnCheck();
                 Move();
+            }
+        }
+
+        delegate void SetCallback();
+        public void ViewShootTank()
+        {
+            if (GameForm.viewGame.panelMap.InvokeRequired)
+            {
+                SetCallback d = new SetCallback(ViewShootTank);
+                GameForm.viewGame.panelMap.Invoke(d, new object[] { });
+            }
+            else
+            {
+                GameForm.viewGame.ViewShoot(this);
             }
         }
 
