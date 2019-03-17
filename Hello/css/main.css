@@ -353,23 +353,27 @@
         background-position: -325px 0;
     }
     
-    .footer span {
+    .quote {
         position: relative;
-        top: -10px;
-        /*  font-style: oblique;*/
+        top: 35px;
+        color: #CED4DD;
+        font-size: 118px;
+        vertical-align: middle;
+        margin: 15px;
     }
     
     .footer {
-        font-family: 'Lato', sans-serif;
+        font-family: 'Signika', sans-serif;
         position: relative;
-        top: 35px;
-        left: 350px;
+        top: 65px;
+        left: -100px;
         width: 100%;
-        min-height: 70px;
         margin: 0px;
         text-align: center;
         background-color: #E9EEF2;
+        display: inline-block;
         font-size: 18px;
+        line-height: 0px;
     }
     
     .p .column .left {
