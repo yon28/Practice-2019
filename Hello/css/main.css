@@ -45,7 +45,7 @@
     
     .features .column {
         float: left;
-        height: 110px;
+        height: 1140px;
     }
     
     .features .column:first-child {
@@ -53,10 +53,79 @@
         margin: 10px 80px 20px 0px;
     }
     
-    .features .column-Main {
+    .timeline {
+        margin: 33px 0px 20px -41px;
+        border-left: 6px solid #DBE2E9;
+        height: 100%;
+        background: #E9EEF2;
+        position: relative;
+    }
+    
+    .dot {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        position: absolute;
+        left: -14px;
+    }
+    
+    .box {
+        width: 70px;
+        height: 35px;
+        position: absolute;
+        left: -40px;
+        top: 1140px;
         background-color: #DBE2E9;
-        width: 8px;
-        margin: 33px 0px 20px -80px;
+        text-align: center;
+        vertical-align: middle;
+        color: white;
+        font-size: 24px;
+        font-family: 'Signika', sans-serif;
+    }
+    
+    .dot:nth-child(1) {
+        top: 160px;
+        background-color: white;
+    }
+    
+    .dot:nth-child(2) {
+        top: 260px;
+        background-color: #DBE2E9;
+    }
+    
+    .dot:nth-child(3) {
+        top: 460px;
+        background-color: #DBE2E9;
+    }
+    
+    .dot:nth-child(4) {
+        top: 520px;
+        background-color: white;
+    }
+    
+    .dot:nth-child(5) {
+        top: 660px;
+        background-color: #DBE2E9;
+    }
+    
+    .dot:nth-child(6) {
+        top: 800px;
+        background-color: white;
+    }
+    
+    .dot:nth-child(7) {
+        top: 880px;
+        background-color: #DBE2E9;
+    }
+    
+    .dot:nth-child(8) {
+        top: 995px;
+        background-color: white;
+    }
+    
+    .dot:nth-child(9) {
+        top: 1040px;
+        background-color: #DBE2E9;
     }
     
     .features .column:last-child {
@@ -293,7 +362,7 @@
     .footer {
         font-family: 'Lato', sans-serif;
         position: relative;
-        top: 1065px;
+        top: 35px;
         left: 350px;
         width: 100%;
         min-height: 70px;
@@ -395,8 +464,6 @@
         bottom: -5px;
         left: 35%;
     }
-    
-
     
     .right .progress-value {
         margin-left: 25px;
