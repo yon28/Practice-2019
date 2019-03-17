@@ -59,6 +59,7 @@
     <Compile Include="Entities\ReportLine.cs" />
     <Compile Include="Entities\Tank.cs" />
     <Compile Include="Entities\Wall.cs" />
+    <Compile Include="Entities\Water.cs" />
     <Compile Include="View\GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +87,7 @@
     <Compile Include="View\ViewObj.cs" />
     <Compile Include="View\ViewTank.cs" />
     <Compile Include="View\ViewWall.cs" />
+    <Compile Include="View\ViewWater.cs" />
     <EmbeddedResource Include="View\GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -159,6 +161,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\PU.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Water.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -30,11 +30,11 @@
         {
             this.components = new System.ComponentModel.Container();
             this.p_Map = new System.Windows.Forms.Panel();
+            this.lbGameOver = new System.Windows.Forms.Label();
             this.lbScore = new System.Windows.Forms.Label();
             this.btnStart = new System.Windows.Forms.Button();
             this.l_points = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.lbGameOver = new System.Windows.Forms.Label();
             this.p_Map.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,14 +49,27 @@
             this.p_Map.Name = "p_Map";
             this.p_Map.Size = new System.Drawing.Size(520, 520);
             this.p_Map.TabIndex = 1;
+            this.p_Map.MouseClick += new System.Windows.Forms.MouseEventHandler(this.p_Map_MouseClick);
+            // 
+            // lbGameOver
+            // 
+            this.lbGameOver.AutoSize = true;
+            this.lbGameOver.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
+            this.lbGameOver.ForeColor = System.Drawing.SystemColors.Control;
+            this.lbGameOver.Location = new System.Drawing.Point(186, 214);
+            this.lbGameOver.Name = "lbGameOver";
+            this.lbGameOver.Size = new System.Drawing.Size(146, 26);
+            this.lbGameOver.TabIndex = 4;
+            this.lbGameOver.Text = "GAME OVER";
+            this.lbGameOver.Visible = false;
             // 
             // lbScore
             // 
             this.lbScore.AutoSize = true;
             this.lbScore.BackColor = System.Drawing.Color.Transparent;
             this.lbScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.lbScore.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.lbScore.Location = new System.Drawing.Point(497, 0);
+            this.lbScore.ForeColor = System.Drawing.SystemColors.Control;
+            this.lbScore.Location = new System.Drawing.Point(482, 0);
             this.lbScore.Name = "lbScore";
             this.lbScore.Size = new System.Drawing.Size(20, 24);
             this.lbScore.TabIndex = 3;
@@ -82,18 +95,6 @@
             this.l_points.Name = "l_points";
             this.l_points.Size = new System.Drawing.Size(0, 13);
             this.l_points.TabIndex = 1;
-            // 
-            // lbGameOver
-            // 
-            this.lbGameOver.AutoSize = true;
-            this.lbGameOver.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.lbGameOver.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lbGameOver.Location = new System.Drawing.Point(186, 214);
-            this.lbGameOver.Name = "lbGameOver";
-            this.lbGameOver.Size = new System.Drawing.Size(146, 26);
-            this.lbGameOver.TabIndex = 4;
-            this.lbGameOver.Text = "GAME OVER";
-            this.lbGameOver.Visible = false;
             // 
             // GameForm
             // 

@@ -17,20 +17,20 @@ namespace Tanks
         // Подписка на событие изменение координат
         public void Subscribe()
         {
-            this.Model.PositionChanged += new EventHandler(OnPositionChanged);
+            Model.PositionChanged += new EventHandler(OnPositionChanged);
             OnPositionChanged(this, new EventArgs());
         }
 
         // Отписка от события изменение координат
         private void Unsubscribe()
         {
-            this.Model.PositionChanged -= new EventHandler(OnPositionChanged);
+            Model.PositionChanged -= new EventHandler(OnPositionChanged);
         }
 
         // Обработчик события изменение координат
         private void OnPositionChanged(object sender, EventArgs e)
         {
-           if( this.Model!=null) Show();
+           if( Model!=null) Show();
         }
 
         // Нарисовать картинку объекта
@@ -43,7 +43,7 @@ namespace Tanks
         // Подвинуть картинку элемента в соответствии с его координатами
         private void SetImage(Point p)
         {
-            if (this.pictBox.InvokeRequired)
+            if (pictBox.InvokeRequired)
             {
                 SetImageCallback d = new SetImageCallback(SetImage);
                 pictBox.Invoke(d, new object[] { Model.Position });
@@ -51,7 +51,7 @@ namespace Tanks
             else
             {
                 ChangePicture();
-                this.pictBox.Location = p;
+                pictBox.Location = p;
             }
         }
 

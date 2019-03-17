@@ -6,7 +6,7 @@ namespace Tanks
 {
     public class Bullet : Dynamic
     {
-        public string Name="";
+        public string Name = "";
 
         public Bullet(Point position) : base(position)
         {
@@ -18,44 +18,24 @@ namespace Tanks
 
         public override void Move()
         {
-            if (position.X + dx >= 0 && position.X + this.Width + dx < MapSize.X)
+            if (position.X + dx >= 0 && position.X + Width + dx < MapSize.X)
             {
                 position.X += dx;
             }
-            if (position.Y + dy >= 0 && position.Y + this.Height + dy < MapSize.Y)
+            if (position.Y + dy >= 0 && position.Y + Height + dy < MapSize.Y)
             {
                 position.Y += dy;
             }
-            if (position.X == 0 || position.Y == 0 || Math.Abs(MapSize.X - position.X) <= this.Width*2||  Math.Abs(MapSize.Y - position.Y)<= this.Height*2)
+            if (position.X <= 2
+                || position.Y <= 2
+                || Math.Abs(MapSize.X - position.X) <= Width + 10 && DirectionNow == 0
+                || Math.Abs(MapSize.Y - position.Y) <= Height + 10 && DirectionNow == 3)
             {
                 Stop();
             }
             flag = true;
             OnPositionChanged();
-            Thread.Sleep(20 / GameForm.Speed);
-        }
-
-        public override void OnCheckPosition(object sender, EventArgs e)
-        {
-            var positionArgs = e as PositionChangedEventArgs;
-            if (positionArgs == null)
-            {
-                return;
-            }
-            if (CollidesWith(positionArgs.NewRectangle))
-            {
-                if (sender is Kolobok && this is BulletT)
-                {
-                    (sender as Kolobok).Stop();
-                    this.Stop();
-                    this.Move();
-                }
-                if (sender is Tank && !(this is Bullet))
-                {
-                    ((Tank)sender).Deviate();
-                    this.Deviate();
-                }
-            }
+            Thread.Sleep(40 / GameForm.Speed);
         }
     }
 }

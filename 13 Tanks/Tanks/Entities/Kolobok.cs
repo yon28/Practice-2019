@@ -13,10 +13,6 @@ namespace Tanks
                 Move();
             }
         }
-        public void Shoot()
-        {
-             GameForm.game.Shoot();
-        }
 
         public Kolobok() : base()
         {
@@ -38,8 +34,14 @@ namespace Tanks
             {
                 if (sender is Tank)
                 {
-                    // Die();
                     Stop();
+                }
+
+                if (sender is BulletT)
+                {
+                    Stop();
+                    ((Dynamic)sender).Stop();
+                    ((Dynamic)sender).Move();
                 }
             }
         }

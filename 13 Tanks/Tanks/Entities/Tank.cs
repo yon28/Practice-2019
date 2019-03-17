@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+
 namespace Tanks
 {
     public class Tank : Dynamic
@@ -23,30 +24,21 @@ namespace Tanks
             {
                 if (sender is BulletK)
                 {
-                    (sender as Dynamic).Stop();//
-                    this.Stop();
-                    this.Move();
+                    Stop();
+                    Move();
+                    ((Dynamic)sender).Stop();
+                    ((Dynamic)sender).Move();
                 }
                 if (sender is Kolobok)
                 {
-                    (sender as Kolobok).Stop();
+                    ((Dynamic)sender).Stop();
                 }
                 if (sender is Tank)
                 {
                     ((Dynamic)sender).Deviate();
-                    this.Deviate();
-                    
+                    Deviate();
                 }
             }
-        }
-
-        public override void Stop()
-        {
-            dy = 0;
-            dx = 0;
-            position.X = -30;
-            position.Y = -30;
-            run = false;
         }
     }
 }

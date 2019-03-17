@@ -9,6 +9,7 @@ namespace Tanks
         public List<ViewTank> arrViewTank;
         ViewKolobok viewKolobok;
         List<ViewWall> viewWall;
+        List<ViewWater> viewWater;
         List<ViewApple> viewApple;
         public List<ViewBullet> viewBullet = new List<ViewBullet>();
         KolobokController kolobokcontroller = new KolobokController();
@@ -22,7 +23,7 @@ namespace Tanks
         private KeyEventHandler keyPress;
         public void SubscribeKeyPress()
         {
-            this.keyPress += new KeyEventHandler(kolobokcontroller.OnKeyPress);
+            keyPress += new KeyEventHandler(kolobokcontroller.OnKeyPress);
             kolobokcontroller.OnKeyPress(viewKolobok, new KeyEventArgs(Keys.Right));
         }
         public virtual void OnKeyPress(Keys key)
@@ -31,22 +32,25 @@ namespace Tanks
                 keyPress(viewKolobok.Model, new KeyEventArgs(key));
             if (key == Keys.Space)
             {
-                ViewShoot(Model.Kolobok);
+              
             }
         }
 
         public void ViewShoot(Dynamic dynamic)
         {
-            ViewBullet viewBullettemp = new ViewBullet(dynamic, panelMap);
-            viewBullettemp.Model = Model.ArrBullet[Model.ArrBullet.Count - 1];
-            viewBullettemp.Model.MapSize = new Point(panelMap.Width, panelMap.Height);
-            viewBullettemp.Subscribe();
-            viewBullet.Add(viewBullettemp);
+            if (Model.ArrBullet.Count != 0)
+            {
+                ViewBullet viewBullettemp = new ViewBullet(dynamic, panelMap);
+                viewBullettemp.Model = Model.ArrBullet[Model.ArrBullet.Count - 1];
+                viewBullettemp.Model.MapSize = new Point(panelMap.Width, panelMap.Height);
+                viewBullettemp.Subscribe();
+                viewBullet.Add(viewBullettemp);
+            }
         }
 
         public void UnsubscribeKeyPress()
         {
-            this.keyPress -= new KeyEventHandler(kolobokcontroller.OnKeyPress);
+             keyPress -= new KeyEventHandler(kolobokcontroller.OnKeyPress);
         }
 
         // Обновить
@@ -55,6 +59,7 @@ namespace Tanks
         {
             arrViewTank = new List<ViewTank>();
             viewWall = new List<ViewWall>();
+            viewWater = new List<ViewWater>();
             viewApple = new List<ViewApple>();
             viewKolobok = new ViewKolobok(panelMap);
             for (int i = 0; i < Model.ArrWall.Count; i++)
@@ -64,6 +69,14 @@ namespace Tanks
                 viewWalltemp.Model.MapSize = new Point(panelMap.Width, panelMap.Height);
                 viewWalltemp.Subscribe();
                 viewWall.Add(viewWalltemp);
+            }
+            for (int i = 0; i < Model.ArrWater.Count; i++)
+            {
+                ViewWater viewWatertemp = new ViewWater(panelMap);
+                viewWatertemp.Model = Model.ArrWater[i];
+                viewWatertemp.Model.MapSize = new Point(panelMap.Width, panelMap.Height);
+                viewWatertemp.Subscribe();
+                viewWater.Add(viewWatertemp);
             }
             viewKolobok.Model = Model.Kolobok;
             viewKolobok.Model.MapSize = new Point(panelMap.Width, panelMap.Height);

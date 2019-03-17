@@ -42,20 +42,49 @@ namespace Tanks
                 }
                 if ((this is Tank) && GameForm.rand.Next(0, 100) == 2)
                 {
-                    GameForm.game.ShootTank(this);
-                    ViewShootTank();
+                    Thread thread = new Thread(new ThreadStart(((Tank)this).Shoot));
+                    GameForm.game.arrThread.Add(thread);
+                    thread.Start();
                 }
                 OnCheck();
                 Move();
             }
         }
 
+        public void Shoot()
+        {
+            Rectangle rect = new Rectangle(Position.X, Position.Y, new Bullet().Width, (new Bullet()).Height);
+            if (this is Kolobok)
+            {
+                var bullet = new BulletK(rect.Location);/**/
+                AddBullet(bullet);
+            }
+            else if (this is Tank)
+            {
+                var bullet = new BulletT(rect.Location);/**/
+                AddBullet(bullet);
+            }
+        }
+
+        public void AddBullet(Bullet bullet)
+        {
+            bullet.IdentifyDirection(DirectionNow);
+            bullet.Name = DateTime.Now.ToString();
+            GameForm.game.arrBullet.Add(bullet);
+            GameForm.game.SubscribeBulletPos(bullet);
+            Thread thread = new Thread(new ThreadStart(bullet.Run));
+            thread.Name = bullet.Name;
+            GameForm.game.arrThread.Add(thread);
+            thread.Start();
+            ViewShoot();
+        }
+        
         delegate void SetCallback();
-        public void ViewShootTank()
+        public void ViewShoot()
         {
             if (GameForm.viewGame.panelMap.InvokeRequired)
             {
-                SetCallback d = new SetCallback(ViewShootTank);
+                SetCallback d = new SetCallback(ViewShoot);
                 GameForm.viewGame.panelMap.Invoke(d, new object[] { });
             }
             else
@@ -66,7 +95,7 @@ namespace Tanks
 
         public virtual void Move()
         {
-            if (position.X + dx >= 0 && position.X + this.Width + dx < MapSize.X)
+            if (position.X + dx >= 0 && position.X + Width + dx < MapSize.X)
             {
                 position.X += dx;
             }
@@ -74,7 +103,7 @@ namespace Tanks
             {
                 Turn();
             }
-            if (position.Y + dy >= 0 && position.Y + this.Height + dy < MapSize.Y)
+            if (position.Y + dy >= 0 && position.Y + Height + dy < MapSize.Y)
             {
                 position.Y += dy;
             }
@@ -168,7 +197,7 @@ namespace Tanks
         {
             if (CheckPosition != null)
             {
-                CheckPosition(this, new PositionChangedEventArgs(new Rectangle(this.position.X + dx, this.position.Y + dy, this.Width, this.Height)));
+                CheckPosition(this, new PositionChangedEventArgs(new Rectangle(position.X + dx, position.Y + dy, Width, Height)));
             }
         }
 
@@ -181,47 +210,18 @@ namespace Tanks
             }
             if (CollidesWith(positionArgs.NewRectangle))
             {
-                if (this is Tank && sender is BulletK)
+                if (this is BulletT && sender is Kolobok)
                 {
-                    ((Bullet)sender).Stop();
-                    this.Stop();
-                    this.Move();
+                    Stop();
+                    Move();
+                    ((Dynamic)sender).Stop();
                 }
-                if (sender is Kolobok)
+                if ( !(this is Bullet)&& sender is Tank)
                 {
-                    (sender as Kolobok).Stop();
-                }
-                if (sender is Tank)
-                {
-                    ((Dynamic)sender).Deviate();
-                    this.Deviate();
-                }
-                if (sender is Kolobok && this is BulletT)
-                {
-                    ((Bullet)this).Stop();
-                    ((Bullet)this).Move();
-                    (sender as Kolobok).Stop();
-                }
-                if (sender is Kolobok && this is Tank)
-                {
-                    (sender as Kolobok).Stop();
-                }
-                if (sender is Tank && !(this is Bullet))
-                {
-                    this.Deviate();
+                    Deviate();
                     ((Dynamic)sender).Deviate();
                 }
             }
         }
-
-        public override void Stop()
-        {
-            dy = 0;
-            dx = 0;
-            position.X = -30;
-            position.Y = -30;
-            run = false;
-        }
-
     }
 }

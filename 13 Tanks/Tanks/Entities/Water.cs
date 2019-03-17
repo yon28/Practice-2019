@@ -3,13 +3,13 @@ using System.Drawing;
 
 namespace Tanks
 {
-    public class Wall : Obj
-    { 
-        public Wall(Point position) : base(position)
+    public class Water : Obj
+    {
+        public Water(Point position) : base(position)
         {
         }
 
-        public Wall()
+        public Water()
         {
         }
 
@@ -31,13 +31,6 @@ namespace Tanks
                 {
                     ((Dynamic)sender).Deviate();
                 }
-                else 
-                {
-                    Replace();
-                    Stop();
-                    ((Bullet)sender).Stop();
-                    ((Bullet)sender).Move();
-                }
             }
         }
 
@@ -50,9 +43,6 @@ namespace Tanks
                 CheckPosition(this, new PositionChangedEventArgs(new Rectangle(position.X + dx, position.Y + dy, Width, Height)));
             }
         }
-
-       
-
     }
 }
 

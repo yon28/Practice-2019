@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace Tanks
@@ -16,13 +15,13 @@ namespace Tanks
             "............**............",
             "..********..**..********..",
             "..********..**..********..",
-            "..........................",
-            "..........................",
-            "..******..**..******..****",
-            "..******..**..******..****",
-            "................**........",
-            "................**........",
-            "..******..**..******..****",
+            "........8.................",
+            "........8.................",
+            "..******8.**..******..****",
+            "..******8.**..******..****",
+            "........8.......**........",
+            "........8.......**........",
+            "..******8.**..******..****",
             "..******..**..******..****",
             "..........................",
             "..........................",
@@ -40,7 +39,7 @@ namespace Tanks
         public static Game game;
         public static ReportForm reportForm = new ReportForm();
         public static int CountWall = 0;
-
+        public static int CountWater = 0;
         public static int Speed
         {
             get;
@@ -77,12 +76,19 @@ namespace Tanks
             InitializeComponent();
             //Расстановка стен по массиву map
             for (int i = 0; i < map.Length; i++)
+            {
                 for (int j = 0; j < map[0].Length; j++)
+                {
                     CountWall += map[i][j] == '*' ? 1 : 0;
+                    CountWater += map[i][j] == '8' ? 1 : 0;
+                }
+            }
+                
             game = new Game();
             viewGame = new ViewGame(p_Map, lbScore);
             viewGame.SubscribeKeyPress();
             viewGame.Model = game;
+
             timer1.Interval = 500; //миллисекунд
             timer1.Tick += new EventHandler(RunFrame);
             timer1.Enabled = true;
@@ -106,7 +112,7 @@ namespace Tanks
             MoveChildForms();
             btnStart.Visible = false;
             viewGame.Model.Start();
-            this.Activate();
+            Activate();
         }
 
         private void UpdateScore()
@@ -139,7 +145,6 @@ namespace Tanks
 
         private void GameForm_Load(object sender, EventArgs e)
         {
-
         }
 
         public void GameOver()
@@ -147,5 +152,9 @@ namespace Tanks
             Application.Exit();
         }
 
+        private void p_Map_MouseClick(object sender, MouseEventArgs e)
+        {
+            MessageBox.Show(e.Location.ToString());
+        }
     }
 }

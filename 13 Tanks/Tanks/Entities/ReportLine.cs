@@ -11,9 +11,9 @@ namespace Tanks
 
         public ReportLine(string name,Point point)
         {
-            this.Name = name;
-            this.PointX = point.X;
-            this.PointY = point.Y;
+            Name = name;
+            PointX = point.X;
+            PointY = point.Y;
     
         }
     }

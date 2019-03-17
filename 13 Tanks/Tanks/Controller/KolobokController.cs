@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Threading;
+using System.Windows.Forms;
 
 namespace Tanks
 {
@@ -32,7 +33,9 @@ namespace Tanks
                         }
                     case Keys.Space:
                         {
-                            ((Kolobok)sender).Shoot();
+                            Thread thread = new Thread(new ThreadStart(((Kolobok)sender).Shoot));
+                            GameForm.game.arrThread.Add(thread);
+                            thread.Start();
                             break;
                         }
                     default:

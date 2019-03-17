@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 
 namespace Tanks
 {
     public class Obj
     {
-        protected int dy =0;
-        protected int dx =0;
+        protected int dy = 0;
+        protected int dx = 0;
         private Point mapSize;
         public Point MapSize
         {
@@ -36,7 +37,7 @@ namespace Tanks
             get { return height; }
             set { }
         }
-       
+
         public virtual void Stop()
         {
             dy = 0;
@@ -44,11 +45,16 @@ namespace Tanks
             position.X = -30;
             position.Y = -30;
             run = false;
+            GameForm.game.UnSubscribePos(this);
+            if (this is Wall) { GameForm.game.ArrWall.Remove((Wall)this); }
+            if (this is Apple) { GameForm.game.ArrApple.Remove((Apple)this); }
+            if (this is Tank) { GameForm.game.ArrTank.Remove((Tank)this); }
+            //if (this is Bullet) { GameForm.game.ArrBullet.Remove((Bullet)this); }
         }
 
         public Obj()
         {
-            this.position = new Point(GameForm.rand.Next(0, GameForm.X - Width - 2), GameForm.rand.Next(0, GameForm.Y - Height - 2));
+            position = new Point(GameForm.rand.Next(0, GameForm.X - Width - 1), GameForm.rand.Next(0, GameForm.Y - Height - 1));
         }
 
         public Obj(Point position)
@@ -58,12 +64,9 @@ namespace Tanks
 
         protected bool CheckCrossing(Point p)
         {
-            if (this.Position.X + this.Width >= p.X && this.Position.X <= p.X)
+            if (p.X - Position.X >= 0 && p.X - Position.X <= Width && p.Y - Position.Y >= 0 && p.Y - Position.Y <= Height)
             {
-                if (this.Position.Y + this.Height >= p.Y && this.Position.Y <= p.Y)
-                {
-                    return true;
-                }
+                return true;
             }
             return false;
         }
@@ -82,20 +85,6 @@ namespace Tanks
 
         public virtual void OnCheckPosition(object sender, EventArgs e)
         {
-            var positionArgs = e as PositionChangedEventArgs;
-            if (positionArgs == null)
-                return;
-            if (CollidesWith(positionArgs.NewRectangle))
-            {
-                if (!(sender is Bullet))
-                {
-                    ((Dynamic)sender).Deviate();
-                }
-                else  if (this is Wall)
-                {
-                    ((Bullet)sender).Stop();
-                }
-            }
         }
 
         public event EventHandler PositionChanged;

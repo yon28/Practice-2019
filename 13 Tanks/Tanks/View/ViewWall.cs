@@ -7,7 +7,7 @@ namespace Tanks
     {
         public ViewWall(Panel map) : base(map)
         {
-            pictBox.Image = Resources.wall; ;
+            pictBox.Image = Resources.wall; 
         }
     }
 }

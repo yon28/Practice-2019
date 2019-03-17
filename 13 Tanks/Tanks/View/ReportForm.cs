@@ -24,7 +24,7 @@ namespace Tanks
         delegate void SetCallback();
         public void UpdateReport()
         {
-            if (this.dgvReport.InvokeRequired)
+            if (dgvReport.InvokeRequired)
             {
                 SetCallback d = new SetCallback(UpdateReport);
                 dgvReport.Invoke(d, new object[] { });
