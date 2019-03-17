@@ -109,7 +109,7 @@ function addManna() { /**/
                 Math.random() * (canvas.height - 100)
             ],
             sprite: new Sprite('img/sprites_02.png', [0, 160], [60, 45],
-                16, [0, 1])
+                4, [0, 1])
         });
     }
 }
@@ -211,7 +211,9 @@ function handleInput(dt) {
 function updateEntities(dt) {
     // Update the player sprite animation
     player.sprite.update(dt);
-    // manna.sprite.update(dt);
+    for (var i = 0; i < manna.length; i++) {
+        manna[i].sprite.update(dt);
+    }
 
     // Update all the bullets
     for (var i = 0; i < bullets.length; i++) {
